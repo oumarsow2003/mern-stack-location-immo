@@ -1,0 +1,14 @@
+.add_annonce{
+    box-sizing:border-box;
+    background-color:rgb(255, 115, 0);
+    color:white;
+    border-radius:.3rem;
+    height:45px;
+    width:300px;
+    text-align: center;
+    transition: all ease-in-out 500ms;
+}
+.site_title{
+    color:rgb(255, 115, 0);
+    font-weight:bold
+}
