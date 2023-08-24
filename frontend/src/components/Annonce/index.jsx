@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { appContext } from '../../utils/Context'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -58,12 +59,12 @@ const Annonce = () => {
   const [authorAnnoncesListError, setAuthorAnnoncesListError] = useState(false)
   const [authorAnnoncesListLoading, setAuthorAnnoncesListLoading] =
     useState(true)
-
+  const { currentUser } = useContext(appContext)
   useEffect(() => {
     const fetchAnnonceData = async () => {
       try {
         const annonceResponse = await axios.get(
-          `http://localhost:3000/annonces/${idAnnonce}`,
+          `${process.env.REACT_APP_BASE_URI}/annonces/${idAnnonce}`,
           {
             headers: {
               Authorization: window.localStorage.getItem('token'),
@@ -74,7 +75,7 @@ const Annonce = () => {
         setAnnonceLoading(false)
 
         const authorResponse = await axios.get(
-          `http://localhost:3000/auth/user/${annonceResponse?.data?.authorId}`,
+          `${process.env.REACT_APP_BASE_URI}/auth/user/${annonceResponse?.data.authorId}`,
           {
             headers: {
               Authorization: window.localStorage.getItem('token'),
@@ -85,7 +86,7 @@ const Annonce = () => {
         setAuthorLoading(false)
 
         const authorAnnoncesListResponse = await axios.get(
-          `http://localhost:3000/auth/user/${annonceResponse?.data?.authorId}`,
+          `${process.env.REACT_APP_BASE_URI}/auth/getUserAnnonces/${annonceResponse?.data.authorId}`,
           {
             headers: {
               Authorization: window.localStorage.getItem('token'),
@@ -95,7 +96,6 @@ const Annonce = () => {
         setAuthorAnnoncesListData(authorAnnoncesListResponse.data)
         setAuthorAnnoncesListLoading(false)
       } catch (error) {
-        console.error(error)
         if (!annonceData) setAnnonceError(true)
         if (!authorData) setAuthorError(true)
         if (!authorAnnoncesListData) setAuthorAnnoncesListError(true)
@@ -112,14 +112,11 @@ const Annonce = () => {
 
   return (
     <div className="body">
-      <Header />
+      <Header currentUser={currentUser} />
       <Container>
         <Left>
           <div className="main_image">
-            <img
-              alt="image_logement"
-              src="https://www.shbarcelona.fr/blog/fr/wp-content/uploads/2016/03/appartement-photo-810x540.jpg"
-            />
+            <img alt="image_logement" src={annonceData?.imageUrl} />
           </div>
           <Title>{annonceData?.title}</Title>
           <h3>{annonceData?.price} $</h3>
@@ -128,7 +125,7 @@ const Annonce = () => {
           <Criteres annonce={annonceData} />
         </Left>
         <Right>
-          <Author>{authorData}</Author>
+          <Author>{authorData.email}</Author>
           <p>
             {authorAnnoncesListData?.length > 0 &&
               `${authorAnnoncesListData?.length} annonces`}

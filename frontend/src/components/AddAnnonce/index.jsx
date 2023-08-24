@@ -21,11 +21,20 @@ const initialFormValues = {
   surface: 0,
   type: '',
   nombrePieces: 0,
+  images: [],
 }
 const AddAnnonce = () => {
   const [annonce, setAnnonce] = useState(initialFormValues)
   const { currentUser } = useContext(appContext)
   const [formError, setFormError] = useState(null)
+
+  // Add a new state variable to keep track of the selected images
+  const [images, setImages] = useState([])
+
+  // Add a new function to handle image selection
+  const handleImageChange = (e) => {
+    setImages([...e.target.files])
+  }
 
   const handleChange = (e) => {
     setAnnonce({ ...annonce, [e.target.name]: e.target.value })
@@ -43,18 +52,29 @@ const AddAnnonce = () => {
 
   const reinitializeForm = () => {
     setAnnonce(initialFormValues)
+    setImages([]) // reset the images state
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const postAnnonce = () => {
+      // Create a new FormData object to hold the form data
+
+      // Append the selected images to the form data
+
       axios
         .post(
-          'http://localhost:3000/annonces/',
-          { ...annonce, author: currentUser.email, country: 'France' },
+          `${process.env.BASE_URI}/annonces/`,
+          {
+            ...annonce,
+            author: currentUser?.email,
+            country: 'France',
+            images: images[0],
+          }, // use the FormData object as the request body
           {
             headers: {
               Authorization: window.localStorage.getItem('token'),
+              'Content-Type': 'multipart/form-data', // set the Content-Type header to multipart/form-data
             },
           }
         )
@@ -79,8 +99,10 @@ const AddAnnonce = () => {
       <AnnonceForm
         handleChange={handleChange}
         handleSubmit={handleSubmit}
+        handleImageChange={handleImageChange}
         annonce={annonce}
       />
+      {/* Add an input element for selecting images */}
     </>
   )
 }

@@ -38,6 +38,14 @@ const annonceSchema = mongoose.Schema(
       type: Number,
       required: false,
     },
+    isHidden: {
+      type: Boolean,
+      required: true,
+    },
+    imageUrl: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

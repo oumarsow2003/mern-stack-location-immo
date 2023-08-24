@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
-import { useFetch } from '../../utils/Hooks/UseFetch'
-import { useState } from 'react'
-import AnnonceForm from '../AnnonceForm'
 import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
+
+import { useFetch } from '../../utils/Hooks/UseFetch'
 import ErrorPage from '../ErrorPage'
 import LinkButton from '../LinkButton'
-import { toast, ToastContainer } from 'react-toastify'
 import Header from '../Header'
+import AnnonceForm from '../AnnonceForm'
+
 const Title = styled.h1`
   display: flex;
   justify-content: center;
 `
+
 const initialFormValues = {
   title: '',
   description: '',
@@ -21,11 +23,11 @@ const initialFormValues = {
   type: 'Appartement',
   nombrePieces: 0,
 }
+
 const EditAnnonce = () => {
   const { idAnnonce } = useParams()
-  //Récupération de l'annonce dont l'id est passé en paramètre
   const { data: annonce, error } = useFetch(
-    `http://localhost:3000/annonces/${idAnnonce}`
+    `${process.env.REACT_APP_BASE_URI}/annonces/${idAnnonce}`
   )
 
   const [updatedAnnonce, setUpdatedAnnonce] = useState(annonce)
@@ -36,9 +38,12 @@ const EditAnnonce = () => {
 
   const handleChange = (e) => {
     annonce &&
-      setUpdatedAnnonce({ ...updatedAnnonce, [e.target.name]: e.target.value })
+      setUpdatedAnnonce({
+        ...updatedAnnonce,
+        [e.target.name]: e.target.value,
+      })
   }
-  //Fonction  qui vérifie que tous les champs ont bien été saisis
+
   const checkIfEmpty = () => {
     return (
       updatedAnnonce?.title?.trim() !== '' &&
@@ -46,15 +51,17 @@ const EditAnnonce = () => {
       updatedAnnonce?.price?.trim() !== ''
     )
   }
+
   const reinitializeForm = () => {
     setUpdatedAnnonce(initialFormValues)
   }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    const postAnnonce = () => {
+    if (checkIfEmpty()) {
       axios
         .put(
-          `http://localhost:3000/annonces/${idAnnonce}`,
+          `${process.env.BASE_URI}/annonces/${idAnnonce}`,
           { ...updatedAnnonce },
           {
             headers: {
@@ -63,9 +70,8 @@ const EditAnnonce = () => {
           }
         )
         .then((annonce) => {
-          // Notification du succès de la publication de l'annonce
           toast.success('Votre annonce a été modifiée !', {
-            autoClose: 2000, // Durée en millisecondes avant de fermer la notification
+            autoClose: 2000,
           })
           reinitializeForm()
         })
@@ -75,9 +81,10 @@ const EditAnnonce = () => {
           })
         )
     }
-    checkIfEmpty && postAnnonce()
   }
-  error && <ErrorPage />
+
+  if (error) return <ErrorPage />
+
   return (
     <>
       <Header />

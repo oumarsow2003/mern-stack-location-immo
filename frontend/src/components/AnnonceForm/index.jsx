@@ -35,9 +35,14 @@ const StyledButton = styled.button`
   border-radius: 0.4rem;
   font-size: 1.4em;
 `
-const AnnonceForm = ({ handleChange, handleSubmit, annonce }) => {
+const AnnonceForm = ({
+  handleChange,
+  handleSubmit,
+  annonce,
+  handleImageChange,
+}) => {
   return (
-    <StyledForm>
+    <StyledForm encType="multipart/form-data">
       <StyledLabel htmlFor="titleAnnonce">
         Entre le titre de votre annonce
       </StyledLabel>
@@ -103,6 +108,7 @@ const AnnonceForm = ({ handleChange, handleSubmit, annonce }) => {
         <option value="Appartement">Appartement</option>
         <option value="Maison">Maison</option>
       </StyledSelect>
+      <input type="file" name="images" onChange={(e) => handleImageChange(e)} />
       <StyledButton
         onClick={(e) => {
           handleSubmit(e)
