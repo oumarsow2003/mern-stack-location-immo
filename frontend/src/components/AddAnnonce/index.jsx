@@ -64,7 +64,7 @@ const AddAnnonce = () => {
 
       axios
         .post(
-          `${process.env.BASE_URI}/annonces/`,
+          `${process.env.REACT_APP_BASE_URI}/annonces/`,
           {
             ...annonce,
             author: currentUser?.email,
