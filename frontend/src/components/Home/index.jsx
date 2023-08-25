@@ -52,10 +52,6 @@ const Home = () => {
     setFilters(initialFilters)
   }
   useEffect(() => {
-    //On stocke l'id de l'utilisateur courant dans le header de la requête axios ,
-    //pour qu'on puisse plus tard vérifier que le token appartient bien à l'utilisateur
-    //on comparera l'id du token avec l'id du header
-
     setAnnoncesListe(annonces)
   }, [annonces])
 

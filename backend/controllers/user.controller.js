@@ -14,7 +14,6 @@ exports.signup = (req, res) => {
         }`,
       })
         .then((user) => {
-          // Générez un JWT pour l'utilisateur
           const token = jwt.sign(
             {
               userId: user._id,
@@ -24,7 +23,6 @@ exports.signup = (req, res) => {
               expiresIn: '24h',
             }
           )
-          // Renvoyez le JWT dans la réponse JSON
           res.status(200).json({ userId: user._id, token })
         })
         .catch((err) => res.status(400).json(err))
@@ -44,7 +42,6 @@ exports.login = (req, res) => {
             .status(404)
             .json({ message: 'Email/mot de passe incorrect' })
         }
-        // Générez un JWT pour l'utilisateur
         const token = jwt.sign(
           {
             userId: user._id,
@@ -54,7 +51,6 @@ exports.login = (req, res) => {
             expiresIn: '24h',
           }
         )
-        // Renvoyez le JWT dans la réponse JSON
         res.status(200).json({ userId: user._id, token })
       })
     })

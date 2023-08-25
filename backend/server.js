@@ -9,7 +9,6 @@ const cookieParser = require('cookie-parser')
 connectDB()
 const app = express()
 
-// Définir les en-têtes CORS avant les autres middlewares et routes
 const corsOptions = {
   credentials: true,
   origin: ['http://localhost:3001', 'localhost:3000'],

@@ -52,16 +52,12 @@ const AddAnnonce = () => {
 
   const reinitializeForm = () => {
     setAnnonce(initialFormValues)
-    setImages([]) // reset the images state
+    setImages([])
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const postAnnonce = () => {
-      // Create a new FormData object to hold the form data
-
-      // Append the selected images to the form data
-
       axios
         .post(
           `${process.env.REACT_APP_BASE_URI}/annonces/`,
@@ -70,18 +66,18 @@ const AddAnnonce = () => {
             author: currentUser?.email,
             country: 'France',
             images: images[0],
-          }, // use the FormData object as the request body
+          },
           {
             headers: {
               Authorization: window.localStorage.getItem('token'),
-              'Content-Type': 'multipart/form-data', // set the Content-Type header to multipart/form-data
+              'Content-Type': 'multipart/form-data',
             },
           }
         )
         .then((annonce) => {
           //Notification du succès de la publication de l'annonce
           toast.success('Votre annonce a été publiée !', {
-            autoClose: 3000, // Durée en millisecondes avant de fermer la notification
+            autoClose: 3000,
           })
           reinitializeForm()
         })
@@ -102,7 +98,6 @@ const AddAnnonce = () => {
         handleImageChange={handleImageChange}
         annonce={annonce}
       />
-      {/* Add an input element for selecting images */}
     </>
   )
 }

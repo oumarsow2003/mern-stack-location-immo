@@ -1,9 +1,8 @@
 // In your annonce.controlleur.js file
 const AnnonceModel = require('../models/annonce.model')
-const upload = require('../middleware/multer-config') // import the upload middleware
+const upload = require('../middleware/multer-config')
 
 exports.addAnnonce = (req, res) => {
-  // If the upload was successful, create a new Annonce with the uploaded image URLs
   const newAnnonce = AnnonceModel.create({
     ...req.body,
     authorId: req.auth.userId,
@@ -11,7 +10,6 @@ exports.addAnnonce = (req, res) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${
       req.file.filename
     }`,
-    // add this line
   })
     .then((annonce) => res.json(annonce))
     .catch((err) => res.status(400).json(err))
