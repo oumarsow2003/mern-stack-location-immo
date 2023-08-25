@@ -20,16 +20,16 @@ const initialFormValues = {
   description: '',
   price: '',
   surface: 0,
-  type: 'Appartement',
+  type: '',
   nombrePieces: 0,
 }
 
 const EditAnnonce = () => {
   const { idAnnonce } = useParams()
+  // Récupération de l'annonce
   const { data: annonce, error } = useFetch(
     `${process.env.REACT_APP_BASE_URI}/annonces/${idAnnonce}`
   )
-
   const [updatedAnnonce, setUpdatedAnnonce] = useState(annonce)
 
   useEffect(() => {
@@ -48,7 +48,11 @@ const EditAnnonce = () => {
     return (
       updatedAnnonce?.title?.trim() !== '' &&
       updatedAnnonce?.description?.trim() !== '' &&
-      updatedAnnonce?.price?.trim() !== ''
+      updatedAnnonce?.price?.trim() !== '' &&
+      updatedAnnonce?.surface?.trim() !== '' &&
+      updatedAnnonce?.type?.trim() !== '' &&
+      updatedAnnonce?.type?.trim() !== '' &&
+      updatedAnnonce?.nombrePieces?.trim() !== ''
     )
   }
 
