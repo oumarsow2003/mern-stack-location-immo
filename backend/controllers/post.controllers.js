@@ -1,4 +1,3 @@
-// In your annonce.controlleur.js file
 const AnnonceModel = require('../models/annonce.model')
 const upload = require('../middleware/multer-config')
 
